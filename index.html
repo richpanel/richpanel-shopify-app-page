@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Richpanel</title>
+  <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f1f1f1;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 24px 0 48px;
+    }
+
+    .page {
+      width: 100%;
+      padding: 0 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    .header-logo    { height: 22px; flex-shrink: 0; display: block; }
+    .header-divider { width: 1px; height: 20px; background: #e5e7eb; flex-shrink: 0; }
+    .header-sub     { font-size: 13px; color: #6b7280; line-height: 1; }
+
+    /* ── Two-column grid ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 12px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,.06);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 18px 20px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .card-icon.purple { background: #f5f3ff; }
+    .card-icon.green  { background: #f0fdf4; }
+
+    .card-title { font-size: 14px; font-weight: 700; color: #111827; line-height: 1.3; }
+    .card-desc  { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.5; }
+
+    /* ── Steps ── */
+    .steps { padding: 4px 20px 8px; flex: 1; }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-body  { flex: 1; min-width: 0; }
+    .step-label { font-size: 13px; font-weight: 600; color: #111827; }
+    .step-hint  { font-size: 12px; color: #6b7280; margin-top: 3px; line-height: 1.6; }
+    .step-hint strong { color: #374151; }
+    .step-hint code {
+      background: #f3f4f6;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 11px;
+      color: #374151;
+    }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s;
+      white-space: nowrap;
+    }
+    .btn:hover { opacity: .82; }
+    .btn.dark    { background: #111827; color: #fff; }
+    .btn.outline { background: #fff; border: 1.5px solid #d1d5db; color: #374151; }
+
+    /* ── Footer strip ── */
+    .card-footer {
+      background: #fafafa;
+      border-top: 1px solid #f3f4f6;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .card-footer-label { font-size: 12px; color: #6b7280; }
+    .card-footer-label strong { color: #111827; }
+
+    @media (max-width: 600px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <img class="header-logo" src="https://cdn.prod.website-files.com/628202eb7980b612a999fc44/672b3cd03a56013598a000a1_richpanel%20logo%20black-min.png" alt="Richpanel" />
+    <div class="header-divider"></div>
+    <span class="header-sub">Enable your extensions to get started</span>
+  </div>
+
+  <div class="section-label">Setup guide</div>
+
+  <div class="cards-grid">
+
+    <!-- ── Card 1: Richpanel ── -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon purple">💬</div>
+        <div>
+          <div class="card-title">Richpanel — Customer Support</div>
+          <div class="card-desc">Enable the Richpanel widget on your storefront to power live chat, help center, and self-service support flows.</div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-label">Open your theme editor</div>
+            <div class="step-hint">Go to <strong>Online Store → Themes → Customize</strong> in your Shopify admin.</div>
+            <div class="btn-row">
+              <a class="btn dark" id="theme-link-1" href="#" target="_top">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Open Theme Editor
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-label">Go to App Embeds</div>
+            <div class="step-hint">Click the <strong>App Embeds</strong> icon (puzzle-piece) in the left sidebar and search for <strong>Richpanel</strong>.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-label">Toggle on and save</div>
+            <div class="step-hint">Enable the <strong>Richpanel</strong> embed and click <strong>Save</strong>. The widget appears automatically — no API key needed.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-footer-label">Manage your inbox in the <strong>Richpanel dashboard</strong></div>
+        <a class="btn outline" href="https://app.richpanel.com" target="_blank">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Richpanel Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Card 2: Richpanel Returns ── -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon green">↩️</div>
+        <div>
+          <div class="card-title">Richpanel Returns — Shop Now</div>
+          <div class="card-desc">Let customers spend their return credit directly in your store. The SDK intercepts checkout and applies the credit automatically.</div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-label">Create a Cart-scoped API key</div>
+            <div class="step-hint">In your Returns admin go to <strong>Settings → API Keys</strong> and create a key with <strong>Cart</strong> scope. Copy it — you'll need it in step 3.</div>
+            <div class="btn-row">
+              <a class="btn dark" href="https://returns.richpanel.com/returns/settings/api-keys" target="_blank">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Create API Key
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-label">Find your checkout button selector</div>
+            <div class="step-hint">On your storefront open the browser console and run <code>RPReturn.inspect()</code>, then click your checkout button. Common selectors: <code>#checkout</code>, <code>.checkout-button</code>.</div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-label">Enable the extension in App Embeds</div>
+            <div class="step-hint">Go to <strong>App Embeds</strong> and enable <strong>Richpanel Returns — Shop Now</strong>. Fill in the <strong>API Key</strong> from step 1 and the <strong>Checkout Button Selector</strong> from step 2.</div>
+            <div class="btn-row">
+              <a class="btn dark" id="theme-link-2" href="#" target="_top">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                Open Theme Editor
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-label">Save and verify</div>
+            <div class="step-hint">Click <strong>Save</strong>. On your storefront run <code>RPReturn.isActive()</code> to confirm the SDK loaded, or <code>RPReturn.testMode()</code> to simulate a live credit session.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer">
+        <div class="card-footer-label">Manage returns and policies in the <strong>Returns dashboard</strong></div>
+        <a class="btn outline" href="https://returns.richpanel.com" target="_blank">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Returns Dashboard
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /cards-grid -->
+</div>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(window.location.search);
+
+    // host is base64url-encoded "admin.shopify.com/store/{handle}"
+    var host = params.get('host') || '';
+    var appEmbedsUrl = '#';
+
+    if (host) {
+      try {
+        var decoded = atob(host.replace(/-/g, '+').replace(/_/g, '/'));
+        // decoded = "admin.shopify.com/store/return-store-7197"
+        appEmbedsUrl = 'https://' + decoded + '/themes/current/editor?context=apps';
+      } catch (e) {}
+    }
+
+    // Fallback: derive from shop param
+    if (appEmbedsUrl === '#') {
+      var shop = params.get('shop') || '';
+      if (shop) {
+        var handle = shop.replace('.myshopify.com', '');
+        appEmbedsUrl = 'https://admin.shopify.com/store/' + handle + '/themes/current/editor?context=apps';
+      }
+    }
+
+    document.getElementById('theme-link-1').href = appEmbedsUrl;
+    document.getElementById('theme-link-2').href = appEmbedsUrl;
+  })();
+</script>
+</body>
+</html>
