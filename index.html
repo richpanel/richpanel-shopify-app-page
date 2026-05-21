@@ -4,17 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Richpanel</title>
-  <script>
-    // Load App Bridge dynamically so data-api-key can be set from the ?apiKey= param.
-    // Each environment's application_url passes its own client_id as ?apiKey=.
-    (function () {
-      var apiKey = new URLSearchParams(window.location.search).get('apiKey') || '';
-      var s = document.createElement('script');
-      s.src = 'https://cdn.shopify.com/shopifycloud/app-bridge.js';
-      if (apiKey) s.setAttribute('data-api-key', apiKey);
-      document.head.appendChild(s);
-    })();
-  </script>
+  <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
